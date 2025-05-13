@@ -1,7 +1,7 @@
 import pika
 import json
 from sqlalchemy.orm import sessionmaker
-from models import Cliente, Abogado, Asunto, Audiencia, Procurador, Incidencia, AsuntoProcurador
+from models import Cliente, Abogado, Asunto, Audiencia, Procurador, Incidencia, asunto_procurador
 from config.config import engine
 
 # Crea la sesión de base de datos
@@ -33,9 +33,6 @@ def callback(ch, method, properties, body):
             elif model == "incidencia":
                 existente = session.query(Incidencia).filter_by(id_incidencia=model_data["id_incidencia"]).first()
                 pk = model_data["id_incidencia"]
-            elif model == "asunto_procurador":
-                existente = session.query(AsuntoProcurador).filter_by(expediente_id=model_data["expediente_id"], id_procurador=model_data["id_procurador"]).first()
-                pk = f"{model_data['expediente_id']}_{model_data['id_procurador']}"
             else:
                 print(f"[WARN] Modelo no soportado: {model}")
                 session.close()
@@ -65,8 +62,7 @@ def callback(ch, method, properties, body):
                         "asunto": Asunto,
                         "audiencia": Audiencia,
                         "procurador": Procurador,
-                        "incidencia": Incidencia,
-                        "asunto_procurador": AsuntoProcurador
+                        "incidencia": Incidencia
                     }[model]
                     nuevo = modelo_clase(**model_data)
                     session.add(nuevo)

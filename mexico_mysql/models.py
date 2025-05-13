@@ -22,11 +22,6 @@ class Cliente(Base):
 
     asuntos = relationship("Asunto", back_populates="cliente")
 
-class AsuntoProcurador(Base):
-    __tablename__ = 'asunto_procurador'
-    expediente_id = Column(Integer, ForeignKey('asunto.expediente_id'), primary_key=True)
-    id_procurador = Column(Integer, ForeignKey('procurador.id_procurador'), primary_key=True)
-
 class Asunto(Base):
     __tablename__ = "asunto"
 

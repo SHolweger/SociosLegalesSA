@@ -1,6 +1,5 @@
 from flask import jsonify
 from models import asunto_procurador
-from utils.rabbitmq_utils import publicar_evento
 
 def get_asunto_procuradores(SessionLocal):
     try:
@@ -34,14 +33,6 @@ def assign_procurador_to_asunto(data, SessionLocal):
         )
         session.add(relacion)
         session.commit()
-        
-        #Publicar en RabbitMQ
-        evento_data = {
-            "expediente_id": expediente_id,
-            "id_procurador": id_procurador
-        }
-        publicar_evento("asunto_procurador", evento_data,action="create")
-        
         return jsonify({"message": "Procurador asignado al asunto correctamente", "status": 201})
     except Exception as e:
         session.rollback()
