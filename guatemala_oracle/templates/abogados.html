@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Abogados{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Listado de Abogados</h2>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">Agregar Abogado</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for abogado in abogados %}
+            <tr>
+                <td>{{ abogado.dni }}</td>
+                <td>{{ abogado.nombre }}</td>
+                <td>{{ abogado.email }}</td>
+                <td>{{ abogado.telefono }}</td>
+                <td>
+                    <a href="/abogados/editar/{{ abogado.dni }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/abogados/eliminar/{{ abogado.dni }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="/abogados/crear">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Abogado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">DNI</label>
+            <input type="text" name="dni" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="text" name="telefono" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

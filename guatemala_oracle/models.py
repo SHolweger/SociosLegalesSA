@@ -11,11 +11,6 @@ asunto_procurador = Table(
     Column('id_procurador', Integer, ForeignKey('procurador.id_procurador'), primary_key=True)
 )
 
-class AsuntoProcurador(Base):
-    __tablename__ = 'asunto_procurador'
-    expediente_id = Column(Integer, ForeignKey('asunto.expediente_id'), primary_key=True)
-    id_procurador = Column(Integer, ForeignKey('procurador.id_procurador'), primary_key=True)
-
 class Cliente(Base):
     __tablename__ = "clientes"  # Nombre de la tabla en Oracle
 

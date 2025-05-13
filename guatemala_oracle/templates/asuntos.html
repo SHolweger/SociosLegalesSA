@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Asuntos{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Listado de Asuntos</h2>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">Agregar Asunto</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asunto in asuntos %}
+            <tr>
+                <td>{{ asunto.id_asunto }}</td>
+                <td>{{ asunto.titulo }}</td>
+                <td>{{ asunto.descripcion }}</td>
+                <td>
+                    <a href="/asuntos/editar/{{ asunto.id_asunto }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/asuntos/eliminar/{{ asunto.id_asunto }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="/asuntos/crear">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Asunto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input type="text" name="titulo" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

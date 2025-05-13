@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Procuradores{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Listado de Procuradores</h2>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">Agregar Procurador</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for procurador in procuradores %}
+            <tr>
+                <td>{{ procurador.id_procurador }}</td>
+                <td>{{ procurador.nombre }}</td>
+                <td>{{ procurador.apellido }}</td>
+                <td>{{ procurador.telefono }}</td>
+                <td>{{ procurador.email }}</td>
+                <td>
+                    <a href="/procuradores/editar/{{ procurador.id_procurador }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/procuradores/eliminar/{{ procurador.id_procurador }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="/procuradores/crear">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Procurador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" name="apellido" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="text" name="telefono" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

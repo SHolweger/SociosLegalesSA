@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Clientes{% endblock %}
+{% block content %}
+<h2 class="text-primary">Clientes</h2>
+<button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevo">
+    <i class="bi bi-person-plus"></i> Nuevo Cliente
+</button>
+<table class="table table-hover">
+    <thead class="table-primary">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in clientes %}
+        <tr>
+            <td>{{ c.id_cliente }}</td>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.telefono }}</td>
+            <td>{{ c.email }}</td>
+            <td>
+                <a href="/clientes/editar/{{ c.id_cliente }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                <a href="/clientes/eliminar/{{ c.id_cliente }}" class="btn btn-sm btn-danger" onclick="return confirm('Eliminar cliente?')"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal para nuevo cliente -->
+<div class="modal fade" id="modalNuevo" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/clientes/crear" method="post">
+          <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title">Nuevo Cliente</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3">
+                  <label class="form-label">Nombre</label>
+                  <input type="text" name="nombre" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                  <label class="form-label">Teléfono</label>
+                  <input type="text" name="telefono" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" name="email" class="form-control" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Guardar</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Replicación{% endblock %}
+{% block content %}
+<h2 class="text-primary">Visualización de Replicación</h2>
+<p class="mb-3">Este apartado muestra la replicación de datos en las sucursales mediante un SELECT UNION.</p>
+<form method="post" action="/replicacion/union">
+    <button class="btn btn-info"><i class="bi bi-database"></i> Ejecutar SELECT UNION</button>
+</form>
+
+{% if resultados %}
+    <h5 class="mt-4">Resultados:</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% for col in columnas %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in resultados %}
+                <tr>
+                    {% for valor in fila %}
+                        <td>{{ valor }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}
