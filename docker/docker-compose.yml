@@ -1,0 +1,93 @@
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: oracle-db
+    environment:
+      ORACLE_PWD: sebas123
+      ORACLE_CHARACTERSET: AL32UTF8
+    ports:
+      - "1522:1521"
+    healthcheck:
+      test: ["CMD", "lsnrctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    platform: linux/amd64
+  micro_guatemala:
+    build:
+      context: ../guatemala_oracle
+    container_name: micro_guatemala
+    ports:
+      - "5001:5001"
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+      rabbitmq:
+       condition: service_started
+    entrypoint: >
+      sh -c "sleep 120 && python app.py"
+    env_file:
+      - ../guatemala_oracle/.env
+  mysql-replica:
+    image: mysql:8.0
+    container_name: MySQL-replica
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sebas123
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-psebas123"]
+      interval: 30s
+      timeout: 10s
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  micro_mexico:
+    build:
+      context: ../mexico_mysql
+    container_name: micro_mexico
+    ports:
+      - "5002:5001"
+    depends_on:
+      mysql-replica:
+        condition: service_healthy
+      rabbitmq:
+       condition: service_started
+    entrypoint: >
+      sh -c "sleep 120 && python app.py"
+    env_file:
+      - ../mexico_mysql/.env
+
+  micro_elsalvador:
+    build:
+      context: ../elsalvador_mysql
+    container_name: micro_elsalvador
+    ports:
+      - "5003:5001"
+    depends_on:
+      mysql-replica:
+        condition: service_healthy
+      rabbitmq:
+       condition: service_started
+    entrypoint: >
+      sh -c "sleep 120 && python app.py"
+    env_file:
+      - ../elsalvador_mysql/.env
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: sebas123
+
+volumes:
+  mysql_data:
+  oracle-db-data:
+
+networks:
+  default:
+    name: backend
